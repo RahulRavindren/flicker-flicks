@@ -1,1 +1,4 @@
-include ':app'
+include ':app',':network',':common'
+
+project(':network').projectDir  = new File('./network')
+project(':common').projectDir = new File('./common')

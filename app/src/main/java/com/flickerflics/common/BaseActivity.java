@@ -17,8 +17,6 @@ public class BaseActivity extends AppCompatActivity {
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    setContentView(R.layout.activity_base_layout);
   }
 
   private void initView() {
@@ -27,6 +25,8 @@ public class BaseActivity extends AppCompatActivity {
 
   @Override
   public void setContentView(int layoutResID) {
+      super.setContentView(R.layout.activity_base_layout);
+
     LayoutInflater inflater =
         (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -35,7 +35,7 @@ public class BaseActivity extends AppCompatActivity {
     mBaseParentLayout.addView(rootView, 1);
   }
 
-  private void assertBundleNull(Intent intent) {
+    private boolean assertBundleNull(Intent intent) {
     return intent.getExtras() == null;
   }
 

@@ -1,9 +1,11 @@
-package com.flickerflics;
+package com.flickerflics.view.homescreen;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+import com.flickerflics.R;
+
+public class HomeActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
