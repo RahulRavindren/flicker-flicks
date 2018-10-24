@@ -6,11 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.flickerflics.interfaces.PaginationListener;
+
+import java.util.LinkedList;
+
 /**
  * @Author rahulravindran
  */
 public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback,
         RecyclerView.OnSystemUiVisibilityChangeListener {
+    private LinkedList<PaginationListener> paginationListeners = new LinkedList<>();
 
     public InfiniteRecyclerView(@NonNull Context context) {
         super(context);
@@ -22,6 +27,11 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         init();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        clearPaginationListeners();
+    }
 
     private void init() {
         setClipToPadding(true);
@@ -31,6 +41,14 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         setOnScrollListener(new ScrollListener());
         setChildDrawingOrderCallback(this);
         setOnSystemUiVisibilityChangeListener(this);
+    }
+
+    public void addPaginationListener(PaginationListener listener) {
+        paginationListeners.add(listener);
+    }
+
+    public void clearPaginationListeners() {
+        paginationListeners.clear();
     }
 
     @Override
@@ -62,7 +80,6 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             if (dy > 0) {
                 Adapter adapter = recyclerView.getAdapter();
-
             }
 
             super.onScrolled(recyclerView, dx, dy);
