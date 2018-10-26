@@ -11,23 +11,22 @@ import java.util.List;
 /**
  * @Author rahulravindran
  */
-public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends RecyclerView.Adapter<VH> {
 
     private List<T> dataItems;
     private LayoutInflater mInflator;
-
+    private boolean showProgress;
 
     public BaseAdapter(List<T> dataItems) {
+        super();
         this.dataItems = dataItems;
     }
 
+    protected abstract VH createItem(LayoutInflater inflator, ViewGroup viewGroup, int viewType);
 
-    abstract VH createItem(LayoutInflater inflator, ViewGroup viewGroup, int viewType);
+    protected abstract void bindItem(VH holder, int position, T object);
 
-    abstract void bindItem(VH holder, int position, T object);
-
-    abstract void viewTearDown(VH holder);
-
+    protected abstract void viewTearDown(VH holder);
 
     @NonNull
     @Override
@@ -45,7 +44,11 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public int getItemCount() {
-        return dataItems.size();
+        if (showProgress) {
+            return dataItems.size() + 1;
+        } else {
+            return dataItems.size();
+        }
     }
 
     public void clearItems() {
@@ -65,5 +68,19 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public void onViewDetachedFromWindow(@NonNull VH holder) {
         holder.setIsRecyclable(true);
         viewTearDown(holder);
+    }
+
+    protected void showProgress(boolean status) {
+        if (dataItems.size() > 0) {
+            showProgress = status;
+            if (status) {
+                dataItems.add(null);
+                notifyItemInserted(dataItems.size() - 1);
+            } else {
+                int lastPos = dataItems.size() -1;
+                dataItems.remove(lastPos);
+                notifyItemRemoved(lastPos);
+            }
+        }
     }
 }

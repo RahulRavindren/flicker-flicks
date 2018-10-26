@@ -6,12 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.interfaces.PaginationListener;
+import com.flickerflics.view.homescreen.adapters.PhotoStreamAdapter;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
  * @Author rahulravindran
+ * Recyclerview with infinite scroll that supports grid based layout only
  */
 public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback,
         RecyclerView.OnSystemUiVisibilityChangeListener {
@@ -21,6 +25,8 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         super(context);
         init();
     }
+
+
 
     public InfiniteRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -32,6 +38,14 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         super.onDetachedFromWindow();
         clearPaginationListeners();
     }
+
+    public void initialState() {
+        PhotoStreamGridLayoutManager manager = new PhotoStreamGridLayoutManager(getContext(), 3);
+        setLayoutManager(manager);
+        setAdapter(new PhotoStreamAdapter(Collections.<PhotoAsset>emptyList()));
+    }
+
+
 
     private void init() {
         setClipToPadding(true);

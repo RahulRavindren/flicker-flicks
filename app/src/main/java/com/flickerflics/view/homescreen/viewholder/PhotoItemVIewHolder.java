@@ -13,4 +13,9 @@ public class PhotoItemVIewHolder extends BaseViewHolder {
     public PhotoItemVIewHolder(@NonNull View itemView) {
         super(itemView);
     }
+
+    @Override
+    public void onBindData(Object data, int position) {
+
+    }
 }

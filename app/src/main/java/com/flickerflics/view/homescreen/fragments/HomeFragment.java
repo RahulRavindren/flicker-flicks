@@ -10,12 +10,17 @@ import android.view.ViewGroup;
 
 import com.flickerflics.R;
 import com.flickerflics.common.BaseFragment;
+import com.flickerflics.entity.PhotoAsset;
+import com.flickerflics.view.homescreen.adapters.PhotoStreamAdapter;
+import com.flickerflics.widgets.InfiniteRecyclerView;
+
+import java.util.Collections;
 
 /**
  * @Author rahulravindran
  */
 public class HomeFragment extends BaseFragment {
-    private RecyclerView mImageList;
+    private InfiniteRecyclerView mImageList;
 
     @Nullable
     @Override
@@ -35,6 +40,7 @@ public class HomeFragment extends BaseFragment {
 
     private void initViews(View view) {
         mImageList = view.findViewById(R.id.image_list);
+        mImageList.initialState();
     }
 
 }
