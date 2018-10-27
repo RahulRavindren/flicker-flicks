@@ -9,8 +9,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
     super(view);
   }
 
-
-
   @Override
   protected void start() {
 

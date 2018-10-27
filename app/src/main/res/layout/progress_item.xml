@@ -6,11 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.ContentLoadingProgressBar
+        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="@dimen/progress_bar_dimen"
         android:layout_height="@dimen/progress_bar_dimen"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:indeterminate="false"
         />
 
 </android.support.constraint.ConstraintLayout>

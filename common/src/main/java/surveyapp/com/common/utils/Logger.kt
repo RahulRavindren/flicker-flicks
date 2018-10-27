@@ -24,33 +24,40 @@ class Logger {
             }
         }
 
+        @JvmStatic
         public fun debug(tag: String?, message: String) {
             Timber.tag(tag)
             Timber.asTree().d(message)
         }
 
+        @JvmStatic
         public fun debug(message: String) {
             Timber.asTree().d(message)
         }
 
+        @JvmStatic
         public fun info(tag: String?, message: String) {
             Timber.tag(tag)
             Timber.asTree().i(message)
         }
 
+        @JvmStatic
         public fun info(message: String) {
             Timber.asTree().i(message)
         }
 
+        @JvmStatic
         public fun error(tag: String?, message: String) {
             Timber.tag(tag)
             Timber.asTree().e(message)
         }
 
+        @JvmStatic
         public fun error(message: String) {
             Timber.asTree().e(message)
         }
 
+        @JvmStatic
         public fun error(t: Throwable?) {
             Timber.asTree().e(t)
         }

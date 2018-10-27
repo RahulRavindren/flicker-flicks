@@ -18,7 +18,6 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends Recycler
     private boolean showProgress;
 
     public BaseAdapter(List<T> dataItems) {
-        super();
         this.dataItems = dataItems;
     }
 
@@ -28,13 +27,21 @@ public abstract class BaseAdapter<T, VH extends BaseViewHolder> extends Recycler
 
     protected abstract void viewTearDown(VH holder);
 
+    protected abstract int viewType(final int position);
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return viewType(position);
+    }
+
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         if (mInflator == null) {
             mInflator = (LayoutInflater) viewGroup.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        return createItem(mInflator, viewGroup, i);
+        return createItem(mInflator, viewGroup, getItemViewType(i));
     }
 
     @Override

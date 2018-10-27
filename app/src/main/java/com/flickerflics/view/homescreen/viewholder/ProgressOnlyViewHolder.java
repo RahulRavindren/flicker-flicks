@@ -16,4 +16,19 @@ public class ProgressOnlyViewHolder extends BaseViewHolder {
 
 
   }
+
+    @Override
+    public void onAttach() {
+
+    }
+
+    @Override
+    public void onDetach() {
+
+    }
+
+    @Override
+    public void onDestory() {
+
+    }
 }
