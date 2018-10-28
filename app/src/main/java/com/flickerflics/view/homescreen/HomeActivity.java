@@ -1,20 +1,22 @@
 package com.flickerflics.view.homescreen;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.SearchView;
 
 import com.flickerflics.R;
 import com.flickerflics.common.SingleFragmentActivity;
+import com.flickerflics.view.homescreen.fragments.HomeFragment;
 import com.flickerflics.widgets.SearchQueryListenerClass;
 
 public class HomeActivity extends SingleFragmentActivity {
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-      initSearchView();
-  }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setFragment(null, HomeFragment.getInstance(), HomeFragment.TAG);
+        initSearchView();
+    }
 
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.image_search_view);
@@ -24,7 +26,12 @@ public class HomeActivity extends SingleFragmentActivity {
             searchView.setIconified(false);
             searchView.clearFocus();
 
-            searchView.setOnQueryTextListener(new SearchQueryListenerClass(null));
+            Fragment fragment = getCurrentFragmentVisible();
+            if (fragment != null) {
+
+                searchView.setOnQueryTextListener(
+                        new SearchQueryListenerClass(((HomeFragment) fragment).getSearchListener()));
+            }
         }
-  }
+    }
 }

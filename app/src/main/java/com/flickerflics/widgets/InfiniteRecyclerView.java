@@ -9,16 +9,20 @@ import android.util.AttributeSet;
 import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.interfaces.PaginationListener;
 import com.flickerflics.view.homescreen.adapters.PhotoStreamAdapter;
+import com.flickerflics.view.homescreen.interfaces.SearchListener;
 
 import java.util.Collections;
 import java.util.LinkedList;
+
+import surveyapp.com.common.utils.Logger;
 
 /**
  * @Author rahulravindran
  * Recyclerview with infinite scroll that supports grid based layout only
  */
 public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.ChildDrawingOrderCallback,
-        RecyclerView.OnSystemUiVisibilityChangeListener {
+        RecyclerView.OnSystemUiVisibilityChangeListener, SearchListener {
+    final String TAG = InfiniteRecyclerView.class.getSimpleName();
     private LinkedList<PaginationListener> paginationListeners = new LinkedList<>();
 
     public InfiniteRecyclerView(@NonNull Context context) {
@@ -45,7 +49,19 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         setAdapter(new PhotoStreamAdapter(Collections.<PhotoAsset>emptyList()));
     }
 
+    @Override
+    public void onCancelAndSearch(String searchTerm) {
+        for (PaginationListener listener : paginationListeners) {
+            listener.initialPage(searchTerm);
+        }
+    }
 
+    @Override
+    public void finalSubmissionSearch(String searchTerm) {
+        for (PaginationListener listener : paginationListeners) {
+            listener.initialPage(searchTerm);
+        }
+    }
 
     private void init() {
         setClipToPadding(true);
@@ -94,6 +110,16 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             if (dy > 0) {
                 Adapter adapter = recyclerView.getAdapter();
+                int totalItems = adapter.getItemCount();
+                PhotoStreamGridLayoutManager manager = (PhotoStreamGridLayoutManager) getLayoutManager();
+                Logger.debug(TAG, "fvp :: " + manager.findFirstVisibleItemPosition());
+                Logger.debug(TAG, "lvp :: " + manager.findLastVisibleItemPosition());
+                Logger.debug(TAG, "fcvp :: " + manager.findFirstCompletelyVisibleItemPosition());
+                Logger.debug(TAG, "lcvp :: " + manager.findLastCompletelyVisibleItemPosition());
+
+                if (manager != null) {
+                    //TODO: right pagination logic
+                }
             }
 
             super.onScrolled(recyclerView, dx, dy);

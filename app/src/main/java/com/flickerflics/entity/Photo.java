@@ -9,12 +9,21 @@ public final class Photo implements Serializable {
     private String id;
     private String owner;
     private String server;
+    private String secret;
     private int farm;
     private String title;
     private int ispublic;
     private int isfriend;
     private int isfamily;
 
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
     public String getId() {
         return id;

@@ -47,6 +47,10 @@ class Utils {
             return application?.getString(id)
         }
 
+        fun getStringParams(id: Int, vararg values: String): String? {
+            return application?.getString(id, values)
+        }
+
 
     }
 

@@ -9,6 +9,7 @@ public abstract class BasePresenter<V extends ViewBase>{
     this.view = view;
   }
 
-  protected abstract void start();
-  protected abstract void stop();
+    public abstract void start();
+
+    public abstract void stop();
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">network</string>
     <string name="no_network_msg">No internet connection</string>
+    <string name="server_error">Currently facing isssues with server</string>
 </resources>

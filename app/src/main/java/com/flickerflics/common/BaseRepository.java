@@ -1,10 +1,19 @@
 package com.flickerflics.common;
 
-import com.flickerflics.interfaces.RepositoryType;
+import android.os.AsyncTask;
+
+import retrofit2.Call;
+import surveyapp.com.network.utils.CallbackState;
+import surveyapp.com.network.utils.CallbackWrapper;
 
 /**
  * @Author rahulravindran
  */
-public class BaseRepository<IN, OUT> implements RepositoryType<IN, OUT> {
+public abstract class BaseRepository<IN, OUT> extends AsyncTask<IN, OUT, OUT> {
+
+    protected void setCallback(Call call, CallbackState callback) {
+        call.enqueue(new CallbackWrapper(callback));
+    }
+
 
 }

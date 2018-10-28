@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">flickerflicks</string>
     <string name="image_search_query_hint">Search for an image</string>
+    <string name="image_base_url">http://farm{farm}.static.flicker.com/{server}/{id}_{secret}.jpg</string>
 </resources>

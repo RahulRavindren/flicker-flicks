@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 
 import com.flickerflics.R;
+import com.flickerflics.view.homescreen.fragments.HomeFragment;
 
 public class SingleFragmentActivity extends BaseActivity implements
     FragmentManager.OnBackStackChangedListener {
@@ -27,7 +28,7 @@ public class SingleFragmentActivity extends BaseActivity implements
         mFragContainer = findViewById(R.id.fragment_container);
     }
 
-  private void setFragment(Intent intent, Fragment fragment) {
+    protected void setFragment(Intent intent, Fragment fragment, String tag) {
       if (fragment == null) {
           throw new NullPointerException("fragment cannot be null");
       }
@@ -39,7 +40,7 @@ public class SingleFragmentActivity extends BaseActivity implements
 
       FragmentManager manager = getSupportFragmentManager();
       FragmentTransaction transaction = manager.beginTransaction();
-      transaction.add(R.id.fragment_container, fragment);
+        transaction.add(R.id.fragment_container, fragment, tag);
       transaction.commit();
       transaction.runOnCommit(new Runnable() {
           @Override
@@ -48,6 +49,11 @@ public class SingleFragmentActivity extends BaseActivity implements
           }
       });
   }
+
+    protected Fragment getCurrentFragmentVisible() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+        return fragment;
+    }
 
 
   @Override
