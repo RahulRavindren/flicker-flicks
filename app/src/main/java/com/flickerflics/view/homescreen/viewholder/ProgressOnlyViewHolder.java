@@ -3,7 +3,7 @@ package com.flickerflics.view.homescreen.viewholder;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.flickerflics.common.BaseViewHolder;
+import com.flickerflics.basecommons.BaseViewHolder;
 
 public class ProgressOnlyViewHolder extends BaseViewHolder {
 

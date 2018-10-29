@@ -2,17 +2,17 @@ package com.flickerflics.view.homescreen.presenter;
 
 import android.os.Handler;
 
-import com.flickerflics.common.BasePresenter;
+import com.flickerflics.basecommons.BasePresenter;
+import com.flickerflics.common.entity.MethodType;
+import com.flickerflics.common.entity.PageEntity;
 import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.interfaces.FlickerRepoListeners;
 import com.flickerflics.interfaces.PaginationListener;
+import com.flickerflics.network.exceptions.BaseError;
 import com.flickerflics.repository.FlickerRepository;
 import com.flickerflics.view.homescreen.interfaces.HomeView;
 
 import java.util.List;
-
-import surveyapp.com.common.entity.MethodType;
-import surveyapp.com.common.entity.PageEntity;
 
 public class HomePresenter extends BasePresenter<HomeView> implements FlickerRepoListeners, PaginationListener {
     private FlickerRepository flickerRepository;
@@ -47,12 +47,14 @@ public class HomePresenter extends BasePresenter<HomeView> implements FlickerRep
 
     @Override
     public void initialPage(String searchTerm) {
+        view.clearAdapters();
+        pageEntity = PageEntity.Companion.getINITIAL();
         searchImage(searchTerm);
     }
 
     @Override
     public void nextPage() {
-        pageEntity.increment();
+        view.showProgressSpinner(true);
         searchImage(previousSearchTerm);
     }
 
@@ -65,11 +67,12 @@ public class HomePresenter extends BasePresenter<HomeView> implements FlickerRep
     public void streamOfImages(List<PhotoAsset> imageStream) {
         if (!imageStream.isEmpty()) {
             view.showImages(imageStream);
+            view.showProgressSpinner(false);
         }
     }
 
     @Override
-    public void errroInStream(Throwable t) {
+    public void errroInStream(BaseError t) {
         view.showError(t.getMessage());
     }
 

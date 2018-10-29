@@ -1,10 +1,10 @@
 package com.flickerflics.widgets;
 
-import android.widget.SearchView;
 
+import android.support.v7.widget.SearchView;
+
+import com.flickerflics.common.utils.Logger;
 import com.flickerflics.view.homescreen.interfaces.SearchListener;
-
-import surveyapp.com.common.utils.Logger;
 
 
 /**

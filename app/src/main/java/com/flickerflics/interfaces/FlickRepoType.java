@@ -1,10 +1,9 @@
 package com.flickerflics.interfaces;
 
+import com.flickerflics.common.entity.PageEntity;
 import com.flickerflics.entity.BaseAsset;
 import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.entity.PhotoWrapperAsset;
-
-import surveyapp.com.common.entity.PageEntity;
 
 /**
  * @Author rahulravindran

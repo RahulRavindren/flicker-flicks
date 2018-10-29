@@ -1,6 +1,7 @@
 package com.flickerflics.interfaces;
 
 import com.flickerflics.entity.PhotoAsset;
+import com.flickerflics.network.exceptions.BaseError;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ import java.util.List;
 public interface FlickerRepoListeners {
     void streamOfImages(List<PhotoAsset> imageStream);
 
-    void errroInStream(Throwable t);
+    void errroInStream(BaseError t);
 }

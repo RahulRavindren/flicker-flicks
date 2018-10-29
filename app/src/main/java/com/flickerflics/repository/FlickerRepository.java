@@ -1,27 +1,31 @@
 package com.flickerflics.repository;
 
-import com.flickerflics.FlickerImageSearchService;
-import com.flickerflics.common.BaseRepository;
+import android.os.AsyncTask;
+
+import com.flickerflics.basecommons.BaseRepository;
+import com.flickerflics.common.entity.PageEntity;
+import com.flickerflics.common.utils.Logger;
 import com.flickerflics.entity.BaseAsset;
 import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.entity.PhotoWrapperAsset;
 import com.flickerflics.interfaces.FlickRepoType;
 import com.flickerflics.interfaces.FlickerRepoListeners;
 import com.flickerflics.mappers.BaseAssetToPhotoAssetMapper;
+import com.flickerflics.network.RetrofitAdapter;
+import com.flickerflics.network.exceptions.BaseError;
+import com.flickerflics.network.utils.CallbackState;
+import com.flickerflics.services.FlickerImageSearchService;
 
 import java.util.List;
 
 import retrofit2.Call;
-import surveyapp.com.common.entity.PageEntity;
-import surveyapp.com.common.utils.Logger;
-import surveyapp.com.network.RetrofitAdapter;
-import surveyapp.com.network.utils.CallbackState;
 
 public class FlickerRepository extends BaseRepository<BaseAsset<PhotoWrapperAsset>, List<PhotoAsset>>
         implements FlickRepoType {
     final String TAG = FlickerRepository.class.getSimpleName();
     private final FlickerRepoListeners listeners;
     private FlickerImageSearchService flickerService;
+    private AsyncOperation asyncOperation;
 
 
     public FlickerRepository(FlickerRepoListeners listeners) {
@@ -44,10 +48,12 @@ public class FlickerRepository extends BaseRepository<BaseAsset<PhotoWrapperAsse
             throw new NullPointerException("service is null");
         }
 
-        cancel(false);
+        if (asyncOperation != null) {
+            asyncOperation.cancel(true);
+        }
 
         if (pageEntity.getQuery() == null || pageEntity.getQuery().isEmpty()) {
-            throw new NullPointerException("search term is empty or null");
+            return;
         }
 
         Call<BaseAsset<PhotoWrapperAsset>> call = flickerService.searchImage(pageEntity.getQuery(),
@@ -58,11 +64,13 @@ public class FlickerRepository extends BaseRepository<BaseAsset<PhotoWrapperAsse
             @Override
             public void onSuccess(BaseAsset<PhotoWrapperAsset> value) {
                 pageEntity.increment();
-                execute(value);
+                asyncOperation = new AsyncOperation();
+                asyncOperation.execute(value);
+
             }
 
             @Override
-            public void onError(Throwable error) {
+            public void onError(BaseError error) {
                 Logger.error(error);
                 if (listeners != null) {
                     listeners.errroInStream(error);
@@ -74,36 +82,40 @@ public class FlickerRepository extends BaseRepository<BaseAsset<PhotoWrapperAsse
     }
 
     public boolean isHalted() {
-        return isCancelled();
+        return asyncOperation.isCancelled();
     }
 
     public void cancelCall() {
-        cancel(true);
-    }
-
-    @Override
-    protected List<PhotoAsset> doInBackground(BaseAsset<PhotoWrapperAsset>... baseAssets) {
-        //obj conversions
-        if (baseAssets == null || baseAssets.length == 0) {
-            throw new NullPointerException("need input to perform background operartion");
-        }
-        return new BaseAssetToPhotoAssetMapper().to(baseAssets[0].getPhotos());
-    }
-
-    @Override
-    protected void onPostExecute(List<PhotoAsset> photoAssets) {
-        // push to presenter
-
-        if (listeners == null) {
-            Logger.error(TAG, "mapping to another object completed. But no listeners to pass asset");
-        }
-        if (listeners != null && !isCancelled()) {
-            listeners.streamOfImages(photoAssets);
+        if (asyncOperation != null) {
+            asyncOperation.cancel(true);
         }
     }
 
     @Override
     public void close() {
 
+    }
+
+
+    private class AsyncOperation extends AsyncTask<BaseAsset<PhotoWrapperAsset>, List<PhotoAsset>, List<PhotoAsset>> {
+
+        @Override
+        protected List<PhotoAsset> doInBackground(BaseAsset<PhotoWrapperAsset>... baseAssets) {
+            //obj conversions
+            if (baseAssets == null || baseAssets.length == 0) {
+                throw new NullPointerException("need input to perform background operartion");
+            }
+            return new BaseAssetToPhotoAssetMapper().to(baseAssets[0].getPhotos());
+        }
+
+        @Override
+        protected void onPostExecute(List<PhotoAsset> photoAssets) {
+            if (listeners == null) {
+                Logger.error(TAG, "mapping to another object completed. But no listeners to pass asset");
+            }
+            if (listeners != null && !isCancelled()) {
+                listeners.streamOfImages(photoAssets);
+            }
+        }
     }
 }

@@ -4,8 +4,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.flickerflics.R;
-import com.flickerflics.common.BaseAdapter;
-import com.flickerflics.common.BaseViewHolder;
+import com.flickerflics.basecommons.BaseAdapter;
+import com.flickerflics.basecommons.BaseViewHolder;
 import com.flickerflics.entity.PhotoAsset;
 import com.flickerflics.view.homescreen.viewholder.PhotoItemVIewHolder;
 import com.flickerflics.view.homescreen.viewholder.ProgressOnlyViewHolder;

@@ -9,5 +9,9 @@ import java.util.List;
 public interface HomeView extends ViewBase {
     void showImages(List<PhotoAsset> photoStream);
 
+    void clearAdapters();
+
+    void showProgressSpinner(boolean status);
+
     void showError(String message);
 }

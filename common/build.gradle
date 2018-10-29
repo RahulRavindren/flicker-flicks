@@ -23,6 +23,9 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   api 'com.android.support:appcompat-v7:' + project.slv
+  implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+  implementation 'com.android.support:design:' + project.slv
+
   implementation 'com.jakewharton.timber:timber:' + project.timber_ver
   api 'com.squareup.retrofit2:retrofit:' + project.retrofit_ver
   api 'com.squareup.retrofit2:converter-gson:' + project.retrofit_ver

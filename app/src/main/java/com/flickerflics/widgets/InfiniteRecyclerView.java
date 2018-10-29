@@ -11,10 +11,8 @@ import com.flickerflics.interfaces.PaginationListener;
 import com.flickerflics.view.homescreen.adapters.PhotoStreamAdapter;
 import com.flickerflics.view.homescreen.interfaces.SearchListener;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
-
-import surveyapp.com.common.utils.Logger;
 
 /**
  * @Author rahulravindran
@@ -30,8 +28,6 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         init();
     }
 
-
-
     public InfiniteRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -46,7 +42,7 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
     public void initialState() {
         PhotoStreamGridLayoutManager manager = new PhotoStreamGridLayoutManager(getContext(), 3);
         setLayoutManager(manager);
-        setAdapter(new PhotoStreamAdapter(Collections.<PhotoAsset>emptyList()));
+        setAdapter(new PhotoStreamAdapter(new ArrayList<PhotoAsset>()));
     }
 
     @Override
@@ -69,7 +65,6 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
         setFitsSystemWindows(true);
 
         setOnScrollListener(new ScrollListener());
-        setChildDrawingOrderCallback(this);
         setOnSystemUiVisibilityChangeListener(this);
     }
 
@@ -112,16 +107,15 @@ public class InfiniteRecyclerView extends RecyclerView implements RecyclerView.C
                 Adapter adapter = recyclerView.getAdapter();
                 int totalItems = adapter.getItemCount();
                 PhotoStreamGridLayoutManager manager = (PhotoStreamGridLayoutManager) getLayoutManager();
-                Logger.debug(TAG, "fvp :: " + manager.findFirstVisibleItemPosition());
-                Logger.debug(TAG, "lvp :: " + manager.findLastVisibleItemPosition());
-                Logger.debug(TAG, "fcvp :: " + manager.findFirstCompletelyVisibleItemPosition());
-                Logger.debug(TAG, "lcvp :: " + manager.findLastCompletelyVisibleItemPosition());
-
+                int lastPos = manager.findLastCompletelyVisibleItemPosition();
                 if (manager != null) {
-                    //TODO: right pagination logic
+                    if (totalItems - 1 == lastPos && prevState == RecyclerView.SCROLL_STATE_SETTLING) {
+                        for (PaginationListener listener : paginationListeners) {
+                            listener.nextPage();
+                        }
+                    }
                 }
             }
-
             super.onScrolled(recyclerView, dx, dy);
         }
     }
